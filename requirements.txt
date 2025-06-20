@@ -1,2 +1,4 @@
 google-genai
 python-dotenv
+httpx 
+requests
