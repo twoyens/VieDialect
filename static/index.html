@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dịch Phương Ngữ - Elegant Blue Demo</title>
+    <link rel="icon" href="/static/images/translator-icon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* --- Light Mode (Sky Theme) --- */
+            --bg-light: #f4f7f9;
+            --panel-bg-light: #ffffff;
+            --text-color-light: #2c3e50;
+            --placeholder-color-light: #8e9eab;
+            --primary-color-light: #007aff; /* Apple Blue */
+            --secondary-color-light: #3a9bd5;
+            --shadow-light: 0 10px 25px rgba(0, 0, 0, 0.08);
+            /* UPDATED: Subtle blue border by default */
+            --border-light: rgba(0, 122, 255, 0.2); 
+            --inset-shadow-light: inset 2px 2px 5px #d1d9e6, inset -2px -2px 5px #ffffff;
+            /* NEW: Blue glow for light mode hover */
+            --hover-glow-light: rgba(0, 122, 255, 0.15);
+
+
+            /* --- Dark Mode (Galaxy Theme) --- */
+            --bg-dark: #191924;
+            --panel-bg-dark: #222230;
+            --text-color-dark: #e0e0e0;
+            --placeholder-color-dark: #7a7a9c;
+            --primary-color-dark: #a777e3; /* Light Purple */
+            --secondary-color-dark: #5b86e5; /* Navy Blue */
+            --glow-color-dark: rgba(167, 119, 227, 0.2);
+            --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --border-dark: #2e2e40;
+            
+            --font-family: 'Be Vietnam Pro', sans-serif;
+            --transition-speed: 0.3s;
+        }
+
+        html {
+            color-scheme: light;
+            --bg-color: var(--bg-light);
+            --panel-bg: var(--panel-bg-light);
+            --text-color: var(--text-color-light);
+            --placeholder-color: var(--placeholder-color-light);
+            --primary-color: var(--primary-color-light);
+            --secondary-color: var(--secondary-color-light);
+            --shadow: var(--shadow-light);
+            --border-color: var(--border-light);
+            --inset-shadow: var(--inset-shadow-light);
+            --hover-glow: var(--hover-glow-light);
+        }
+
+        html.dark-mode {
+            color-scheme: dark;
+            --bg-color: var(--bg-dark);
+            --panel-bg: var(--panel-bg-dark);
+            --text-color: var(--text-color-dark);
+            --placeholder-color: var(--placeholder-color-dark);
+            --primary-color: var(--primary-color-dark);
+            --secondary-color: var(--secondary-color-dark);
+            --shadow: var(--shadow-dark);
+            --border-color: var(--border-dark);
+            --inset-shadow: none;
+            --hover-glow: var(--glow-color-dark);
+        }
+        
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem;
+            transition: background var(--transition-speed);
+        }
+
+        .translator-app {
+            width: 100%;
+            max-width: 950px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all var(--transition-speed);
+        }
+        
+        .theme-switch {
+            display: inline-block; height: 34px; position: relative; width: 60px;
+        }
+        .theme-switch input { display: none; }
+        .slider {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0;
+            transition: var(--transition-speed); border-radius: 34px;
+        }
+        .slider:before {
+            background-color: var(--panel-bg);
+            box-shadow: var(--shadow);
+            bottom: 4px; content: ""; height: 26px; left: 4px; position: absolute;
+            transition: var(--transition-speed); width: 26px; border-radius: 50%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23007aff" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>');
+            background-repeat: no-repeat; background-position: center;
+        }
+        input:checked + .slider { background-color: var(--panel-bg); }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23a777e3" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>');
+        }
+        
+        .panels-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            min-height: 300px;
+            transition: all var(--transition-speed);
+        }
+        
+        /* UPDATED: Unified hover effect using variables */
+        .panel:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 15px 35px var(--hover-glow);
+        }
+        
+        /* UPDATED: Dark mode hover now inherits the glow from the variable */
+        html.dark-mode .panel:hover {
+            box-shadow: 0 0 40px var(--hover-glow);
+        }
+
+        .panel-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);
+        }
+        .language-select-wrapper { position: relative; }
+        .language-select-wrapper::after { content: '▼'; font-size: 0.8rem; position: absolute; right: 0; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--placeholder-color); }
+        .panel-header select, .panel-header h2 { font-size: 1rem; font-weight: 600; color: var(--text-color); margin: 0; background: transparent; border: none; padding-right: 1.5rem; -webkit-appearance: none; appearance: none; cursor: pointer; }
+        .panel-header select:focus { outline: none; }
+        .panel-header option:disabled { color: #aaaaaa; }
+        html.dark-mode .panel-header option:disabled { color: #555; }
+        
+        .panel-body { flex-grow: 1; position: relative; }
+        textarea { width: 100%; height: 100%; background: transparent; border: none; resize: none; color: var(--text-color); font-size: 1.1rem; font-family: var(--font-family); }
+        textarea:focus { outline: none; }
+        textarea::placeholder { color: var(--placeholder-color); }
+        .output-panel .panel-body { font-size: 1.1rem; line-height: 1.6; color: var(--placeholder-color); }
+        .output-panel .panel-body #translated-text { color: var(--text-color); }
+
+        .panel-footer { margin-top: 1rem; height: 44px; display: flex; justify-content: flex-end; }
+        
+        #play-button {
+            width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            box-shadow: var(--shadow);
+            cursor: pointer; display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transform: scale(0.8);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #play-button.visible { opacity: 1; visibility: visible; transform: scale(1); }
+        #play-button:active { box-shadow: var(--inset-shadow); }
+        #play-button svg { width: 22px; height: 22px; fill: var(--primary-color); }
+        
+        .action-area { display: flex; justify-content: center; }
+        #translateButton {
+            padding: 1rem 3rem; border-radius: 50px; border: none;
+            color: white; font-size: 1.1rem; font-weight: 600; cursor: pointer;
+            position: relative; overflow: hidden;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        #translateButton:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        #translateButton::before { /* The shimmer effect */
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s;
+        }
+        #translateButton:hover::before { left: 100%; }
+        #translateButton:disabled {
+            background: #999; cursor: not-allowed; box-shadow: none; transform: none;
+        }
+        
+        @media (max-width: 800px) {
+            .panels-container { grid-template-columns: 1fr; }
+            .app-header { flex-direction: column; gap: 1rem; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- The HTML BODY and SCRIPT parts remain exactly the same. -->
+    <div class="translator-app">
+        <header class="app-header">
+            <h1>Dịch Phương Ngữ</h1>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="theme-checkbox">
+                    <input type="checkbox" id="theme-checkbox" />
+                    <div class="slider"></div>
+                </label>
+            </div>
+        </header>
+        
+        <div class="panels-container">
+            <div class="panel input-panel">
+                <div class="panel-header">
+                    <div class="language-select-wrapper">
+                         <select id="source-language">
+                            <option value="quangbinh" selected>Quảng Bình</option>
+                            <option value="nghean" disabled>Nghệ An (sắp có)</option>
+                            <option value="phuyen" disabled>Phú Yên (sắp có)</option>
+                            <option value="angiang" disabled>An Giang (sắp có)</option>
+                            <option value="bentre" disabled>Bến Tre (sắp có)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <textarea id="inputText" placeholder="Bựa chừ tau mệt trong người..."></textarea>
+                </div>
+                <div class="panel-footer"></div>
+            </div>
+
+            <div class="panel output-panel">
+                <div class="panel-header"><h2>Tiếng Phổ thông</h2></div>
+                <div class="panel-body" id="outputBody">Kết quả dịch sẽ xuất hiện ở đây.</div>
+                <div class="panel-footer">
+                    <audio id="audio-player"></audio>
+                    <button id="play-button" title="Phát âm">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-area">
+            <button id="translateButton">Dịch</button>
+        </div>
+    </div>
+
+    <script>
+        const themeSwitch = document.getElementById('theme-checkbox');
+        const inputText = document.getElementById('inputText');
+        const translateButton = document.getElementById('translateButton');
+        const outputBody = document.getElementById('outputBody');
+        const audioPlayer = document.getElementById('audio-player');
+        const playButton = document.getElementById('play-button');
+        const defaultOutputText = "Kết quả dịch sẽ xuất hiện ở đây.";
+
+        function setTheme(isDark) {
+            document.documentElement.classList.toggle('dark-mode', isDark);
+            themeSwitch.checked = isDark;
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+        themeSwitch.addEventListener('change', (e) => setTheme(e.target.checked));
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        setTheme(savedTheme === 'dark');
+
+        inputText.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                translateButton.click();
+            }
+        });
+        playButton.addEventListener('click', () => audioPlayer.play());
+        translateButton.addEventListener('click', handleTranslate);
+        
+        function typeWriter(element, text, speed = 15) {
+            element.innerHTML = ''; let i = 0;
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i); i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        async function handleTranslate() {
+            const textToTranslate = inputText.value.trim();
+            if (!textToTranslate) {
+                alert("Vui lòng nhập văn bản cần dịch.");
+                return;
+            }
+
+            translateButton.disabled = true;
+            playButton.classList.remove('visible');
+            outputBody.innerHTML = defaultOutputText;
+            audioPlayer.src = '';
+
+            try {
+                const response = await fetch('/api/translate-and-speak', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: textToTranslate }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ detail: 'Lỗi không xác định.' }));
+                    throw new Error(errorData.detail || 'Có lỗi xảy ra.');
+                }
+                const data = await response.json();
+
+                const translatedElement = document.createElement('span');
+                translatedElement.id = 'translated-text';
+                outputBody.innerHTML = '';
+                outputBody.appendChild(translatedElement);
+                
+                typeWriter(translatedElement, data.translated_text);
+                
+                audioPlayer.src = `data:audio/mp3;base64,${data.audio_base64}`;
+                playButton.classList.add('visible');
+
+            } catch (error) {
+                outputBody.innerHTML = `<span style="color: #ff5555;">Lỗi: ${error.message}</span>`;
+            } finally {
+                translateButton.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
