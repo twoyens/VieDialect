@@ -185,11 +185,5 @@ templates = Jinja2Templates(directory="static")
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    # Trả về file index.html khi người dùng truy cập vào trang chủ
     return templates.TemplateResponse("index.html", {"request": request})
 
-# --- 7. Lệnh để chạy Server (khi chạy local) ---
-if __name__ == "__main__":
-    import uvicorn
-    # Để chạy, mở terminal và gõ: uvicorn main:app --reload
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
